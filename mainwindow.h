@@ -50,6 +50,10 @@ private slots:
     void on_pushButton_5_clicked();
     void createDirectory(QTreeView *tree, QDirModel *model);
     void removeDirectory(QTreeView *tree, QDirModel *model);
+    void openFile(QTreeView *tree, QDirModel *model);
+    void createFile(QTreeView *tree, QDirModel *model);
+
+    void on_pushButton_78_clicked();
 
 private:
     Ui::MainWindow *ui;

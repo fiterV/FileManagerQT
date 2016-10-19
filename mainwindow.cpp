@@ -103,14 +103,12 @@ void MainWindow::on_pushButton_4_clicked()
     removeDirectory(ui->treeRight, modelRight);
 }
 
-void MainWindow::on_actionOpen_triggered()
-{
-
-    QModelIndexList list = ui->treeLeft->selectionModel()->selectedIndexes();
+void MainWindow::openFile(QTreeView *tree, QDirModel *model){
+    QModelIndexList list = tree->selectionModel()->selectedIndexes();
 
     if (list.size()==0) return void(QMessageBox::warning(this, "Warning", "You have to pick up the file"));
     QModelIndex index = list[0];
-    QString file_path = modelLeft->filePath(index);
+    QString file_path = model->filePath(index);
     QFileInfo *pp = new QFileInfo(file_path);
 
     if (pp->isDir()) return void(QMessageBox::warning(this, "Warning", "You have to pick up the file"));
@@ -129,36 +127,9 @@ void MainWindow::on_actionOpen_triggered()
       }
 }
 
-void MainWindow::on_actionOpen_Right_triggered()
-{
-    QModelIndexList list = ui->treeRight->selectionModel()->selectedIndexes();
 
-    if (list.size()==0) return void(QMessageBox::warning(this, "Warning", "You have to pick up the file"));
-    QModelIndex index = list[0];
-    QString file_path = modelRight->filePath(index);
-    QFileInfo *pp = new QFileInfo(file_path);
-
-    if (pp->isDir()) return void(QMessageBox::warning(this, "Warning", "You have to pick up the file"));
-
-    QMessageBox::StandardButton x = QMessageBox::question(this, "ask","Do you want to use standart program?", QMessageBox::Yes|QMessageBox::No);
-
-    if (x==QMessageBox::Yes){
-         QProcess *process = new QProcess(this);
-         process->start("xdg-open", QStringList() << file_path);
-    } else
-      {
-        TextEditor *xss = new TextEditor();
-        xss->setPath(file_path);
-
-        xss->show();
-      }
-
-
-}
-
-void MainWindow::on_pushButton_5_clicked()
-{
-    QModelIndexList list = ui->treeLeft->selectionModel()->selectedIndexes();
+void MainWindow::createFile(QTreeView *tree, QDirModel *model){
+    QModelIndexList list = tree->selectionModel()->selectedIndexes();
     if (list.isEmpty()) return;
 
     QString name = QInputDialog::getText(this, "Name", "Enter the name of file that you want to create" );
@@ -166,7 +137,7 @@ void MainWindow::on_pushButton_5_clicked()
 
 
     QModelIndex index = list[0];
-    QString file_path = modelLeft->filePath(index);
+    QString file_path = model->filePath(index);
     QFileInfo *x = new QFileInfo(file_path);
     if (x->isDir()) {
         file_path+="/"+name;
@@ -181,4 +152,24 @@ void MainWindow::on_pushButton_5_clicked()
         qDebug() << "It's not a directory , it's file\n";
     }
     refresh();
+}
+
+void MainWindow::on_actionOpen_triggered()
+{
+    openFile(ui->treeLeft, modelLeft);
+}
+
+void MainWindow::on_actionOpen_Right_triggered()
+{
+    openFile(ui->treeRight, modelRight);
+}
+
+void MainWindow::on_pushButton_5_clicked()
+{
+    createFile(ui->treeLeft, modelLeft);
+}
+
+void MainWindow::on_pushButton_6_clicked()
+{
+    createFile(ui->treeRight, modelRight);
 }
