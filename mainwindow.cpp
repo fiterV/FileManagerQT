@@ -30,8 +30,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     QGraphicsOpacityEffect *op= new QGraphicsOpacityEffect(ui->treeLeft);
-    op->setOpacity(0.3);
+    op->setOpacity(0.5);
     ui->treeLeft->setGraphicsEffect(op);
+    ui->treeRight->setGraphicsEffect(op);
+
 
 
     QPixmap bkgnd("/home/anon/Downloads/os_x_el_capitan-wallpaper-1366x768.jpg");
@@ -64,43 +66,29 @@ void MainWindow::on_drivesLeft_activated(const QString &arg1)
    // modelLeft->setRootPath(arg1);
 }
 
-void MainWindow::createDirectory(QTreeView *tree, QDirModel *model){
-    QModelIndex index = tree->currentIndex();
 
-    if (!index.isValid()) return;
-    QString name = QInputDialog::getText(this, "Name", "Enter the name" );
+void MainWindow::createFile(QTreeView *tree, QDirModel *model){
+    QModelIndexList list = tree->selectionModel()->selectedIndexes();
+    if (list.isEmpty()) return;
 
+    QString name = QInputDialog::getText(this, "Name", "Enter the name of file that you want to create" );
     if (name.isEmpty()) return;
-    model->mkdir(index, name);
+
+    QModelIndex index = list[0];
+    QString file_path = model->filePath(index);
+    QFileInfo *x = new QFileInfo(file_path);
+    if (x->isDir()) {
+        file_path+="/"+name;
+        QFile file(file_path);
+        file.open(QIODevice::ReadWrite | QIODevice::Text);
+        QTextStream stream(&file);
+        stream<<"";
+        file.close();
+    } else
+    {
+        qDebug() << "It's not a directory , it's file\n";
+    }
     refresh();
-}
-
-void MainWindow::removeDirectory(QTreeView *tree, QDirModel *model){
-    QModelIndex index = tree->currentIndex();
-    if (!index.isValid()) return;
-
-    if (model->fileInfo(index).isDir()){
-           model->rmdir(index);
-    } else model->remove(index);
-    refresh();
-}
-
-void MainWindow::on_pushButton_clicked()
-{
-    createDirectory(ui->treeLeft, modelLeft);
-}
-
-void MainWindow::on_pushButton_2_clicked()
-{
-    removeDirectory(ui->treeLeft, modelLeft);
-}
-void MainWindow::on_pushButton_3_clicked()
-{
-    createDirectory(ui->treeRight, modelRight);
-}
-void MainWindow::on_pushButton_4_clicked()
-{
-    removeDirectory(ui->treeRight, modelRight);
 }
 
 void MainWindow::openFile(QTreeView *tree, QDirModel *model){
@@ -127,31 +115,49 @@ void MainWindow::openFile(QTreeView *tree, QDirModel *model){
       }
 }
 
+void MainWindow::createDirectory(QTreeView *tree, QDirModel *model){
+    QModelIndex index = tree->currentIndex();
 
-void MainWindow::createFile(QTreeView *tree, QDirModel *model){
-    QModelIndexList list = tree->selectionModel()->selectedIndexes();
-    if (list.isEmpty()) return;
+    if (!index.isValid()) return;
+    QString name = QInputDialog::getText(this, "Name", "Enter the name" );
 
-    QString name = QInputDialog::getText(this, "Name", "Enter the name of file that you want to create" );
     if (name.isEmpty()) return;
-
-
-    QModelIndex index = list[0];
-    QString file_path = model->filePath(index);
-    QFileInfo *x = new QFileInfo(file_path);
-    if (x->isDir()) {
-        file_path+="/"+name;
-        QFile file(file_path);
-        file.open(QIODevice::ReadWrite | QIODevice::Text);
-        QTextStream stream(&file);
-        stream<<"";
-        file.close();
-
-    } else
-    {
-        qDebug() << "It's not a directory , it's file\n";
-    }
+    model->mkdir(index, name);
     refresh();
+}
+
+void MainWindow::removeDirectory(QTreeView *tree, QDirModel *model){
+    QModelIndex index = tree->currentIndex();
+    if (!index.isValid()) return;
+
+    if (model->fileInfo(index).isDir()){
+            QModelIndexList list = tree->selectionModel()->selectedIndexes();
+
+            if (list.size()==0) return void(QMessageBox::warning(this, "Warning", "You have to pick up the file"));
+            QModelIndex index = list[0];
+            QString file_path = model->filePath(index);
+            QDir dir(file_path);
+            dir.removeRecursively();
+    } else model->remove(index);
+    refresh();
+}
+
+void MainWindow::on_mkdirLeft_clicked()
+{
+    createDirectory(ui->treeLeft, modelLeft);
+}
+
+void MainWindow::on_rmLeft_clicked()
+{
+    removeDirectory(ui->treeLeft, modelLeft);
+}
+void MainWindow::on_mkdirRight_clicked()
+{
+    createDirectory(ui->treeRight, modelRight);
+}
+void MainWindow::on_rmRight_clicked()
+{
+    removeDirectory(ui->treeRight, modelRight);
 }
 
 void MainWindow::on_actionOpen_triggered()
@@ -164,12 +170,26 @@ void MainWindow::on_actionOpen_Right_triggered()
     openFile(ui->treeRight, modelRight);
 }
 
-void MainWindow::on_pushButton_5_clicked()
+void MainWindow::on_touchFileLeft_clicked()
 {
     createFile(ui->treeLeft, modelLeft);
 }
 
-void MainWindow::on_pushButton_6_clicked()
+void MainWindow::on_touchFileRight_clicked()
 {
     createFile(ui->treeRight, modelRight);
+}
+
+void MainWindow::on_treeLeft_pressed(const QModelIndex &index)
+{
+
+}
+
+void MainWindow::on_treeLeft_activated(const QModelIndex &index)
+{
+
+}
+
+void MainWindow::dropEvent(QDropEvent *event)
+{
 }

@@ -41,11 +41,20 @@
             <property name="contextMenuPolicy">
              <enum>Qt::ActionsContextMenu</enum>
             </property>
+            <property name="acceptDrops">
+             <bool>true</bool>
+            </property>
             <property name="autoFillBackground">
              <bool>false</bool>
             </property>
             <property name="styleSheet">
              <string notr="true">QTreeView::item:hover{background-color:#FFFF00;}</string>
+            </property>
+            <property name="dragEnabled">
+             <bool>true</bool>
+            </property>
+            <property name="dragDropMode">
+             <enum>QAbstractItemView::InternalMove</enum>
             </property>
             <property name="textElideMode">
              <enum>Qt::ElideRight</enum>
@@ -84,21 +93,28 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_2">
           <item>
-           <widget class="QPushButton" name="pushButton">
+           <widget class="QPushButton" name="mkdirLeft">
             <property name="text">
              <string>Make dir</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_5">
+           <widget class="QPushButton" name="touchFileLeft">
             <property name="text">
              <string>CreateFile</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_2">
+           <widget class="QPushButton" name="pushButton">
+            <property name="text">
+             <string>Copy</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="rmLeft">
             <property name="text">
              <string>Remove</string>
             </property>
@@ -117,8 +133,17 @@
           </item>
           <item>
            <widget class="QTreeView" name="treeRight">
+            <property name="acceptDrops">
+             <bool>true</bool>
+            </property>
             <property name="styleSheet">
              <string notr="true">QTreeView::item:hover{background-color:#FFFF00;}</string>
+            </property>
+            <property name="dragEnabled">
+             <bool>true</bool>
+            </property>
+            <property name="dragDropMode">
+             <enum>QAbstractItemView::InternalMove</enum>
             </property>
             <property name="sortingEnabled">
              <bool>true</bool>
@@ -133,14 +158,21 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout">
           <item>
-           <widget class="QPushButton" name="pushButton_3">
+           <widget class="QPushButton" name="mkdirRight">
             <property name="text">
              <string>Make dir</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_4">
+           <widget class="QPushButton" name="touchFileRight">
+            <property name="text">
+             <string>Create File</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="rmRight">
             <property name="text">
              <string>Remove</string>
             </property>
