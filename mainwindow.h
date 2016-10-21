@@ -15,6 +15,8 @@
 #include <QGraphicsEffect>
 #include <QAbstractTableModel>
 #include <QTreeView>
+#include <QDragMoveEvent>
+#include <QString>
 
 namespace Ui {
 class MainWindow;
@@ -43,17 +45,30 @@ private slots:
     void openFile(QTreeView *tree, QDirModel *model);
     void createFile(QTreeView *tree, QDirModel *model);
 
+    QString copyPath(QTreeView *tree, QDirModel *model);
+
+
     void on_touchFileRight_clicked();
 
     void on_treeLeft_pressed(const QModelIndex &index);
 
     void on_treeLeft_activated(const QModelIndex &index);
     void dropEvent(QDropEvent *event);
+    virtual void dragMoveEvent ( QDragMoveEvent *event );
+
+    void on_copyLeft_clicked();
+
+    void on_copyRight_clicked();
+
+    void on_pasteLeft_clicked();
+
+    void on_pasteRight_clicked();
 
 private:
     Ui::MainWindow *ui;
     //QFileSystemModel
     QDirModel *modelLeft, *modelRight;
+    QString copiedPathLeft, copiedPathRight;
     void refresh();
 };
 

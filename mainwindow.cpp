@@ -30,7 +30,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     QGraphicsOpacityEffect *op= new QGraphicsOpacityEffect(ui->treeLeft);
-    op->setOpacity(0.5);
+    op->setOpacity(0.7);
     ui->treeLeft->setGraphicsEffect(op);
     ui->treeRight->setGraphicsEffect(op);
 
@@ -92,6 +92,12 @@ void MainWindow::createFile(QTreeView *tree, QDirModel *model){
 }
 
 void MainWindow::openFile(QTreeView *tree, QDirModel *model){
+    TextEditor *xss = new TextEditor();
+    xss->setPath("/home/anon/123.txt");
+
+    xss->show();
+    return;
+
     QModelIndexList list = tree->selectionModel()->selectedIndexes();
 
     if (list.size()==0) return void(QMessageBox::warning(this, "Warning", "You have to pick up the file"));
@@ -113,6 +119,16 @@ void MainWindow::openFile(QTreeView *tree, QDirModel *model){
 
         xss->show();
       }
+}
+
+
+QString MainWindow::copyPath(QTreeView *tree, QDirModel *model){
+    QModelIndexList list = tree->selectionModel()->selectedIndexes();
+
+    if (list.size()==0) return QString("broken");
+    QModelIndex index = list[0];
+    QString file_path = model->filePath(index);
+    return file_path;
 }
 
 void MainWindow::createDirectory(QTreeView *tree, QDirModel *model){
@@ -192,4 +208,52 @@ void MainWindow::on_treeLeft_activated(const QModelIndex &index)
 
 void MainWindow::dropEvent(QDropEvent *event)
 {
+}
+
+void MainWindow::dragMoveEvent ( QDragMoveEvent *event ){
+
+}
+
+
+
+void MainWindow::on_copyLeft_clicked()
+{
+    copiedPathLeft=copyPath(ui->treeLeft, modelLeft);
+    ui->copyLeft->setEnabled(false);
+    ui->copyRight->setEnabled(false);
+    ui->pasteLeft->setEnabled(false);
+    qDebug()<<"copied left " << copiedPathLeft;
+}
+
+void MainWindow::on_copyRight_clicked()
+{
+    copiedPathRight=copyPath(ui->treeRight, modelRight);
+    ui->copyLeft->setEnabled(false);
+    ui->copyRight->setEnabled(false);
+    ui->pasteRight->setEnabled(false);
+    qDebug()<< "copied right " << copiedPathRight;
+}
+
+void MainWindow::on_pasteLeft_clicked()
+{
+    QString curr = copyPath(ui->treeLeft, modelLeft);
+
+    QProcess *process = new QProcess(this);
+    process->start("cp -avr "+copiedPathRight+" "+curr);
+    ui->copyLeft->setEnabled(true);
+    ui->copyRight->setEnabled(true);
+    ui->pasteRight->setEnabled(true);
+    refresh();
+}
+
+void MainWindow::on_pasteRight_clicked()
+{
+    QString curr = copyPath(ui->treeRight, modelRight);
+
+    QProcess *process = new QProcess(this);
+    process->start("cp -avr "+copiedPathLeft+" "+curr);
+    ui->copyLeft->setEnabled(true);
+    ui->copyRight->setEnabled(true);
+    ui->pasteLeft->setEnabled(true);
+    refresh();
 }
