@@ -93,7 +93,7 @@ void MainWindow::createFile(QTreeView *tree, QDirModel *model){
 
 void MainWindow::openFile(QTreeView *tree, QDirModel *model){
     TextEditor *xss = new TextEditor();
-    xss->setPath("/home/anon/123.txt");
+    xss->setPath("/home/anon/Nadia/123.txt");
 
     xss->show();
     return;
@@ -238,11 +238,20 @@ void MainWindow::on_pasteLeft_clicked()
 {
     QString curr = copyPath(ui->treeLeft, modelLeft);
 
-    QProcess *process = new QProcess(this);
-    process->start("cp -avr "+copiedPathRight+" "+curr);
+
+    QFileInfo *x = new QFileInfo(copiedPathRight);
+
     ui->copyLeft->setEnabled(true);
     ui->copyRight->setEnabled(true);
     ui->pasteRight->setEnabled(true);
+    if (x->isFile()){
+        QMessageBox::StandardButton x = QMessageBox::question(this, "ask","Do you want to overwrite existing file?", QMessageBox::Yes|QMessageBox::No);
+        if (x==QMessageBox::No) return;
+    }
+    QProcess *process = new QProcess(this);
+    process->start("cp -avr "+copiedPathRight+" "+curr);
+
+
     refresh();
 }
 
@@ -250,10 +259,20 @@ void MainWindow::on_pasteRight_clicked()
 {
     QString curr = copyPath(ui->treeRight, modelRight);
 
-    QProcess *process = new QProcess(this);
-    process->start("cp -avr "+copiedPathLeft+" "+curr);
+
     ui->copyLeft->setEnabled(true);
     ui->copyRight->setEnabled(true);
     ui->pasteLeft->setEnabled(true);
+
+    QFileInfo *x = new QFileInfo(copiedPathLeft);
+
+    if (x->isFile()){
+        QMessageBox::StandardButton x = QMessageBox::question(this, "ask","Do you want to overwrite existing file?", QMessageBox::Yes|QMessageBox::No);
+        if (x==QMessageBox::No) return;
+    }
+    QProcess *process = new QProcess(this);
+    process->start("cp -avr "+copiedPathLeft+" "+curr);
+
+
     refresh();
 }

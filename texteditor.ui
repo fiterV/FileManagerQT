@@ -45,7 +45,7 @@
        <item>
         <widget class="QPushButton" name="pushButton_3">
          <property name="text">
-          <string>10 longest words</string>
+          <string>10 most frequent words</string>
          </property>
         </widget>
        </item>
@@ -53,6 +53,13 @@
         <widget class="QPushButton" name="pushButton_4">
          <property name="text">
           <string>Transform</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_5">
+         <property name="text">
+          <string>Exit</string>
          </property>
         </widget>
        </item>

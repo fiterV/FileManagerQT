@@ -49,14 +49,18 @@ void TextEditor::on_pushButton_3_clicked()
 
     std::map<QString, int> m;
     m.clear();
-    for (int i=0; i<p.size(); i++){
+
+    QStringList xx2 = p.split(QRegExp("\\W+"), QString::SkipEmptyParts);
+            //.split("!@#$%^&*()[]:;.,/\></?,{} ~");
+    for (int i=0; i<xx2.size(); i++) m[xx2[i]]++;
+
+    /*for (int i=0; i<p.size(); i++){
         QChar c = p[i];
-        if (QString("!@#$%^&*()[]:;.></?,").contains(c)) continue;
-        if (c==' ' || c=='\n') {
-            m[s]++;
+        if (QString("!@#$%^&*()[]:;.></?,{} ").contains(c)) {
+            if (s!="") m[s]++;
             s="";
         } else s+=c;
-    }
+    }*/
     std::vector< std::pair<int, QString> > v;
     for (std::map<QString, int>::iterator it = m.begin(); it!=m.end(); it++){
         v.push_back(std::make_pair(it->second, it->first));
@@ -76,6 +80,7 @@ void TextEditor::on_pushButton_3_clicked()
 void TextEditor::on_pushButton_4_clicked()
 {
     QString s = ui->textEdit->toPlainText();
+    QString p="";
     QChar pr = s[0];
     s[0] = s[0].toUpper();
     for (int i=1; i<s.size(); i++){
@@ -84,8 +89,15 @@ void TextEditor::on_pushButton_4_clicked()
                 s[i] = s[i].toUpper();
             }
         }
-        if (s[i]!='\n') pr = s[i];
+        if (s[i]!='\n' && s[i]!=' ') pr = s[i];
     }
 
     ui->textEdit->setPlainText(s);
+}
+
+void TextEditor::on_pushButton_5_clicked()
+{
+    //QApplication::quit();
+    close();
+
 }
