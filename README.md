@@ -1,19 +1,13 @@
 # FileManager
-<img src="images/qt.png" width="20%">
+<img src="images/qt.png" width="10%">
 
 ## Overview
 Simple file manager for viewing and managing files in the system with custom text editor.
 
 ## Screenshots
-![1](images/1.png)
-![2](images/2.png)
-![3](images/3.png)
-![4](images/4.png)
-![5](images/5.png)
-![6](images/6.png)
-![7](images/7.png)
-![8](images/8.png)
+
+<img src="images/1.png" width="48%"> <img src="images/2.png" width="50%">
+<img src="images/3.png" width="48%"> <img src="images/4.png" width="50%">
+<img src="images/5.png" width="48%"> <img src="images/6.png" width="50%">
+<img src="images/7.png" width="48%"> <img src="images/8.png" width="50%">
 ![9](images/9.png)
-
-
-
